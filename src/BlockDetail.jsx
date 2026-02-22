@@ -2,19 +2,38 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Block1 from './Images/blocks/Block-1.webp';
 import { blockData } from './data/blockData';
 import './BuildingMap.css';
+
+// Import images
+import Block1Img from './Images/blocks/Block-1.webp';
+import Block2Img from './Images/blocks/Block-1.webp';
+import Block3Img from './Images/blocks/Block-3.webp';
+import Block4Img from './Images/blocks/Block-4.webp';
+
+const blockImages = {
+    '1': Block1Img,
+    '2': Block2Img,
+    '3': Block3Img,
+    '4': Block4Img,
+    '5': Block4Img
+};
 
 const BlockDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const data = blockData[id];
 
-    // If no data found for the ID, we can fallback or handle error
     const floors = data ? data.floors : [];
     const basePath = data ? data.basePath : "";
     const blockName = data ? data.name : "Noma'lum Blok";
+    const viewBox = data ? data.viewBox : "0 0 2736 2052";
+    const bgImage = blockImages[id] || Block1Img;
+
+    // Parse width and height from viewBox for the image element
+    const viewBoxValues = viewBox.split(' ');
+    const svgWidth = viewBoxValues[2] || "2736";
+    const svgHeight = viewBoxValues[3] || "2052";
 
     const [activeFloor, setActiveFloor] = useState(-1);
     const [blinkKey, setBlinkKey] = useState(0);
@@ -31,7 +50,12 @@ const BlockDetail = () => {
 
     const handleClickFloor = (index, e) => {
         e.stopPropagation();
-        activateFloor(index);
+        if (activeFloor === index) {
+            // Ikkinchi marta bosildi — qavat ichiga kirish
+            navigate(`/block/${id}/floor/${index}`);
+        } else {
+            activateFloor(index);
+        }
     };
 
     const handleFloorUp = (e) => {
@@ -67,7 +91,7 @@ const BlockDetail = () => {
         <div className="building-map-container" onClick={resetFloors}>
             <div
                 className="detail-background-blur"
-                style={{ backgroundImage: `url(${Block1})` }}
+                style={{ backgroundImage: `url(${bgImage})`, backgroundSize: 'cover' }}
             ></div>
 
             <button
@@ -93,6 +117,29 @@ const BlockDetail = () => {
                 ← Orqaga
             </button>
 
+            <div
+                style={{
+                    position: 'absolute',
+                    top: '20px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 2000,
+                    padding: '10px 20px',
+                    fontSize: '16px',
+                    backgroundColor: '#000',
+                    color: '#fff',
+                    border: 'none',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                }}
+            >
+                {blockName}
+            </div>
+
             <div className="controls">
                 <button className="nav-btn" onClick={handleFloorUp}>↑</button>
                 <div className="current-mode">
@@ -113,17 +160,17 @@ const BlockDetail = () => {
             <svg
                 width="100%"
                 height="100%"
-                viewBox="0 0 2736 2052"
-                preserveAspectRatio="xMidYMid meet"
+                viewBox={viewBox}
+                preserveAspectRatio="xMidYMid slice"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
             >
                 <image
-                    width="2736"
-                    height="2052"
-                    xlinkHref={Block1}
-                    preserveAspectRatio="xMidYMid meet"
+                    width={svgWidth}
+                    height={svgHeight}
+                    xlinkHref={bgImage}
+                    preserveAspectRatio="xMidYMid slice"
                 />
 
                 {/* Base Blue Path - Always visible/animated */}

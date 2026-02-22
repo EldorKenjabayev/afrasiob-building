@@ -66,8 +66,8 @@ const BuildingMap = () => {
     const [blinkKey, setBlinkKey] = useState(0);
 
     const activateBlock = (index) => {
-        if (activeIndex === index && (index === 0 || index === 1)) {
-            // Already active and it is Block 1 or 2 -> Enter Detail View
+        if (activeIndex === index && (index === 0 || index === 1 || index === 2 || index === 3 || index === 4)) {
+            // Already active and it is Block 1, 2 or 3 -> Enter Detail View
             navigate(`/block/${index + 1}`);
         } else {
             // Otherwise just select it

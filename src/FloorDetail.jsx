@@ -11,13 +11,35 @@ import Floor3Block3 from './Images/floors/3-Block-Floors3-16.png';
 import Floor2Block1 from './Images/floors/1-Block-Floors-3-12.png';
 import Floor2_4Block2_4 from './Images/floors/2-4-Block-Floors-3-14.png';
 import Floor5Block5 from './Images/floors/5-Block-Floors-3-12.png';
+import Floor2Block3 from './Images/floors/3-Block-Floor-2.png';
+import Floor1Block3 from './Images/floors/3-Block-Floor-1.png';
+import Floor1Block2_4 from './Images/floors/2-4-Block-Floor-1.png';
+import Floor2Block2_4 from './Images/floors/2-4-Block-Floor-2.png';
+import Floor15Block2_4 from './Images/floors/2-4-Block-Floor-15.png';
+import Floor1Block1 from './Images/floors/Block1-Floor-1.png';
+import Floor1Block5 from './Images/floors/Block5-floor1.png';
+import Floor13Block1 from './Images/floors/Block1-Floor-13.png';
+import Floor13Block5 from './Images/floors/Block5-Floor-13.png';
+import Floor2_Block1_new from './Images/floors/Block1-Floor-2.png';
+import Floor2_Block5 from './Images/floors/Block5-Floor-2.png';
 
 
 const floorImages = {
     '3-Block-Floors3-16': Floor3Block3,
     '1-Block-Floors-2-12': Floor2Block1,
     '2-4-Block-Floors-3-14': Floor2_4Block2_4,
-    '5-Block-Floors-3-12': Floor5Block5
+    '5-Block-Floors-3-12': Floor5Block5,
+    '3-Block-Floor-2': Floor2Block3,
+    '3-Block-Floor-1': Floor1Block3,
+    '2-4-Block-Floor-1': Floor1Block2_4,
+    '2-4-Block-Floor-2': Floor2Block2_4,
+    '2-4-Block-Floor-15': Floor15Block2_4,
+    'Block1-Floor-1': Floor1Block1,
+    'Block5-floor1': Floor1Block5,
+    'Block1-Floor-13': Floor13Block1,
+    'Block5-Floor-13': Floor13Block5,
+    'Block1-Floor-2': Floor2_Block1_new,
+    'Block5-Floor-2': Floor2_Block5
 };
 
 

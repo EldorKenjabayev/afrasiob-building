@@ -11,13 +11,35 @@ import Floor3Block3 from './Images/floors/3-Block-Floors3-16.png';
 import Floor2Block1 from './Images/floors/1-Block-Floors-3-12.png';
 import Floor2_4Block2_4 from './Images/floors/2-4-Block-Floors-3-14.png';
 import Floor5Block5 from './Images/floors/5-Block-Floors-3-12.png';
+import Floor2Block3 from './Images/floors/3-Block-Floor-2.png';
+import Floor1Block3 from './Images/floors/3-Block-Floor-1.png';
+import Floor1Block2_4 from './Images/floors/2-4-Block-Floor-1.png';
+import Floor2Block2_4 from './Images/floors/2-4-Block-Floor-2.png';
+import Floor15Block2_4 from './Images/floors/2-4-Block-Floor-15.png';
+import Floor1Block1 from './Images/floors/Block1-Floor-1.png';
+import Floor1Block5 from './Images/floors/Block5-floor1.png';
+import Floor13Block1 from './Images/floors/Block1-Floor-13.png';
+import Floor13Block5 from './Images/floors/Block5-Floor-13.png';
+import Floor2_Block1 from './Images/floors/Block1-Floor-2.png';
+import Floor2_Block5 from './Images/floors/Block5-Floor-2.png';
 
 
 const floorImages = {
     '3-Block-Floors3-16': Floor3Block3,
     '1-Block-Floors-2-12': Floor2Block1,
     '2-4-Block-Floors-3-14': Floor2_4Block2_4,
-    '5-Block-Floors-3-12': Floor5Block5
+    '5-Block-Floors-3-12': Floor5Block5,
+    '3-Block-Floor-2': Floor2Block3,
+    '3-Block-Floor-1': Floor1Block3,
+    '2-4-Block-Floor-1': Floor1Block2_4,
+    '2-4-Block-Floor-2': Floor2Block2_4,
+    '2-4-Block-Floor-15': Floor15Block2_4,
+    'Block1-Floor-1': Floor1Block1,
+    'Block5-floor1': Floor1Block5,
+    'Block1-Floor-13': Floor13Block1,
+    'Block5-Floor-13': Floor13Block5,
+    'Block1-Floor-2': Floor2_Block1,
+    'Block5-Floor-2': Floor2_Block5
 };
 
 
@@ -203,15 +225,17 @@ const ApartmentDetail = () => {
                 top: '50%',
                 left: '10px',
                 transform: 'translateY(-50%)',
-                width: '280px',
+                width: '250px',
                 backgroundColor: 'rgba(255, 255, 255, 0.95)',
                 backdropFilter: 'blur(10px)', padding: '20px', borderRadius: '20px',
                 boxShadow: '0 10px 30px rgba(0,0,0,0.1)', zIndex: 1000,
                 border: '1px solid rgba(0,0,0,0.05)'
             }}>
                 <div style={{ color: '#000' }}>
-                    <h3 style={{ margin: '0 0 10px 0' }}>Xonadon haqida</h3>
-                    <p style={{ margin: '5px 0', opacity: 0.7 }}>Ushbu xonadon {block.name} ning {floorNum + 1}-qavatida joylashgan.</p>
+                    <h3 style={{ margin: '0 0 10px 0' }}>{floorNum + 1 === 1 ? "Do'kon" : "Xonadon"} haqida</h3>
+                    <p style={{ margin: '5px 0', opacity: 0.7 }}>
+                        Ushbu {floorNum + 1 === 1 ? "do'kon" : "xonadon"} {block.name} ning {floorNum + 1}-qavatida joylashgan.
+                    </p>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '15px' }}>
                         <div style={{ backgroundColor: '#f5f5f7', padding: '10px', borderRadius: '12px' }}>
                             <small style={{ display: 'block', opacity: 0.5 }}>Maydoni</small>
@@ -219,7 +243,7 @@ const ApartmentDetail = () => {
                         </div>
                         <div style={{ backgroundColor: '#f5f5f7', padding: '10px', borderRadius: '12px' }}>
                             <small style={{ display: 'block', opacity: 0.5 }}>Turi</small>
-                            <strong>{apartment.rooms} xonali</strong>
+                            <strong>{floorNum + 1 === 1 ? "Do'kon" : `${apartment.rooms} xonali`}</strong>
                         </div>
                     </div>
                 </div>

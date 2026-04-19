@@ -166,7 +166,7 @@ const BuildingMap = () => {
             tick(); // darhol birinchi tick
             modeIntervalRef.current = setInterval(tick, 400); // har 400ms
         }
-    }, [stopModeAnimation, sendRandomAllBlocks]);
+    }, [stopModeAnimation]);
 
     // ================================================================
     //  NAVIGATSIYA

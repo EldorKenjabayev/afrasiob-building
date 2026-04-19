@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { blockData } from './data/blockData';
 import './BuildingMap.css';
+import wsService from './wsService';
 
 // Import images
 import Block1Img from './Images/blocks/Block-1.webp';
@@ -75,6 +76,30 @@ const BlockDetail = () => {
             activateFloor((activeFloor - 1 + floors.length) % floors.length);
         }
     };
+
+    // WebSocket: sahifaga kirganida darhol blokni yoq
+    useEffect(() => {
+        if (['1', '2', '3', '4', '5'].includes(id)) {
+            // Sahifaga kirildi — butun blokni yoq
+            wsService.sendCommand(`B${id}_ON`);
+        }
+        // Sahifadan chiqqanda — barchani o'chir
+        return () => {
+            wsService.sendCommand('GLOBAL_OFF');
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id]);
+
+    // WebSocket: qavat tanlanganda
+    useEffect(() => {
+        if (['1', '2', '3', '4', '5'].includes(id)) {
+            if (activeFloor !== -1) {
+                wsService.sendCommand(`FL_${id}_${activeFloor}`);
+            } else {
+                wsService.sendCommand(`B${id}_ON`);
+            }
+        }
+    }, [id, activeFloor]);
 
     if (!data) {
         return (

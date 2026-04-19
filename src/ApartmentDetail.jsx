@@ -1,10 +1,12 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { floorData } from './data/floorData';
 import { blockData } from './data/blockData';
 import './BuildingMap.css';
+import Loading from './components/Loading';
+import wsService from './wsService';
 
 // Import floor images (using same as FloorDetail for consistency)
 import Floor3Block3 from './Images/floors/3-Block-Floors3-16.png';
@@ -70,6 +72,16 @@ const ApartmentDetail = () => {
 
     // Tanlangan kvartirani topish
     const apartment = plan?.apartments.find(a => a.id === aptId);
+    
+    // Kvartira indeksini topish (0 dan boshlab sanaladi, ESP32 API uchun kerak)
+    const aptIndex = plan?.apartments.findIndex(a => a.id === aptId);
+
+    // WebSocket send signals
+    useEffect(() => {
+        if (['1', '2', '3', '4', '5'].includes(blockId) && aptIndex !== undefined && aptIndex !== -1) {
+            wsService.sendCommand(`AP_${blockId}_${floorNum}_${aptIndex}`);
+        }
+    }, [blockId, floorNum, aptIndex]);
 
     // Bounding Box hisoblash (viewBox ni crop qilish uchun)
     const apartmentViewBox = useMemo(() => {
@@ -133,6 +145,29 @@ const ApartmentDetail = () => {
         return `${croppedX} ${croppedY} ${croppedW} ${croppedH}`;
     }, [apartment, plan]);
 
+    const bgImage = plan ? floorImages[plan.image] : null;
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Reset loading state when image changes
+    useEffect(() => {
+        if (!bgImage) {
+            setIsLoading(false);
+            return;
+        }
+        
+        setIsLoading(true);
+        const img = new Image();
+        img.src = bgImage;
+        
+        if (img.complete) {
+            setIsLoading(false);
+        } else {
+            img.onload = () => setIsLoading(false);
+            img.onerror = () => setIsLoading(false);
+        }
+    }, [bgImage]);
+
     if (!plan || !apartment) {
         return (
             <div className="building-map-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -144,13 +179,13 @@ const ApartmentDetail = () => {
         );
     }
 
-    const bgImage = floorImages[plan.image];
     const originalViewBox = plan.viewBox.split(' ');
     const svgWidth = originalViewBox[2];
     const svgHeight = originalViewBox[3];
 
     return (
         <div className="building-map-container" style={{ backgroundColor: '#ffffff', position: 'relative' }}>
+            {isLoading && <Loading />}
             {/* Header / Nav */}
             <button
                 onClick={() => navigate(-1)}

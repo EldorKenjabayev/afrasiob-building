@@ -1,10 +1,12 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { floorData } from './data/floorData';
 import { blockData } from './data/blockData';
 import './BuildingMap.css';
+import Loading from './components/Loading';
+import wsService from './wsService';
 
 // Import floor images
 import Floor3Block3 from './Images/floors/3-Block-Floors3-16.png';
@@ -76,6 +78,51 @@ const FloorDetail = () => {
 
     const [activeApartment, setActiveApartment] = useState(-1);
     const [blinkKey, setBlinkKey] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const bgImage = plan ? floorImages[plan.image] : null;
+
+    // Reset loading state when image changes
+    useEffect(() => {
+        if (!bgImage) {
+            setIsLoading(false);
+            return;
+        }
+        
+        setIsLoading(true);
+        const img = new Image();
+        img.src = bgImage;
+        
+        if (img.complete) {
+            setIsLoading(false);
+        } else {
+            img.onload = () => setIsLoading(false);
+            img.onerror = () => setIsLoading(false);
+        }
+    }, [bgImage]);
+
+    // WebSocket: sahifaga kirganida darhol qavatni yoq
+    useEffect(() => {
+        if (['1', '2', '3', '4', '5'].includes(blockId)) {
+            wsService.sendCommand(`FL_${blockId}_${floorNum}`);
+        }
+        // Sahifadan chiqqanda — barchani o'chir
+        return () => {
+            wsService.sendCommand('GLOBAL_OFF');
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [blockId, floorNum]);
+
+    // WebSocket: xonadon tanlanganda
+    useEffect(() => {
+        if (['1', '2', '3', '4', '5'].includes(blockId)) {
+            if (activeApartment !== -1) {
+                wsService.sendCommand(`AP_${blockId}_${floorNum}_${activeApartment}`);
+            } else {
+                wsService.sendCommand(`FL_${blockId}_${floorNum}`);
+            }
+        }
+    }, [blockId, floorNum, activeApartment]);
 
     if (!plan) {
         return (
@@ -90,7 +137,6 @@ const FloorDetail = () => {
     }
 
     const apartments = plan.apartments;
-    const bgImage = floorImages[plan.image];
     const viewBox = plan.viewBox;
     const viewBoxValues = viewBox.split(' ');
     const svgWidth = viewBoxValues[2] || "2736";
@@ -136,6 +182,7 @@ const FloorDetail = () => {
 
     return (
         <div className="building-map-container" onClick={resetApartments} style={{ backgroundColor: '#ffffffff' }}>
+            {isLoading && <Loading />}
             <div
                 style={{ position: 'absolute', inset: 0, backgroundColor: '#ffffffff', zIndex: 0 }}
             ></div>

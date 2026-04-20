@@ -62,6 +62,19 @@ const BuildingMap = () => {
     const [modeIndex, setModeIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [blinkKey, setBlinkKey] = useState(0);
+    const [color, setColor] = useState('#ff8c14'); // YANTAR Default
+
+    const handleColorChange = (e) => {
+        e.stopPropagation();
+        const hex = e.target.value;
+        setColor(hex);
+        
+        // HEX to RGB
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        wsService.sendCommand(`COLOR_${r}_${g}_${b}`);
+    };
 
     const modeIntervalRef = useRef(null);
     // Spiral rejimi uchun har bir blokda qaysi pozitsiyada ekanligini saqlaydi
@@ -244,6 +257,40 @@ const BuildingMap = () => {
                     {modes[modeIndex].label}
                 </div>
                 <button className="nav-btn" onClick={handleModePrev}>↓</button>
+            </div>
+
+            <div 
+                title="Rang sozlamasi" 
+                style={{ 
+                    position: 'absolute',
+                    top: '20px',
+                    right: '25px',
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '8px', 
+                    background: '#000', 
+                    padding: '8px 14px', 
+                    borderRadius: '25px',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    zIndex: 1000
+                }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                <span style={{ fontSize: '20px', display: 'flex', alignItems: 'center' }}>⚙️</span>
+                <input 
+                    type="color" 
+                    value={color} 
+                    onChange={handleColorChange} 
+                    style={{ 
+                        cursor: 'pointer', 
+                        border: 'none', 
+                        background: 'transparent', 
+                        height: '30px', 
+                        width: '35px',
+                        padding: '0'
+                    }}
+                />
             </div>
 
             <div

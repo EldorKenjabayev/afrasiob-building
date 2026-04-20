@@ -68,7 +68,7 @@ const BuildingMap = () => {
         e.stopPropagation();
         const hex = e.target.value;
         setColor(hex);
-        
+
         // HEX to RGB
         const r = parseInt(hex.slice(1, 3), 16);
         const g = parseInt(hex.slice(3, 5), 16);
@@ -81,9 +81,10 @@ const BuildingMap = () => {
     const spiralCursors = useRef({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
 
     const modes = [
-        { name: 'Oddiy',     label: 'ODDIY'     },  // 0 — statik random
+        { name: 'Oddiy', label: 'ODDIY' },  // 0 — statik random
         { name: 'Tasodifiy', label: 'TASODIFIY' },  // 1 — har 5s yangi random
-        { name: 'Spiral',    label: 'SPIRAL'    },  // 2 — ketma-ket sliding
+        { name: 'Spiral', label: 'SPIRAL' },  // 2 — ketma-ket sliding
+        { name: 'Yoniq', label: 'HAMMASI YONIQ' }, // 3 — barcha bloklar yoniq
     ];
 
     const blocks = [
@@ -178,6 +179,10 @@ const BuildingMap = () => {
 
             tick(); // darhol birinchi tick
             modeIntervalRef.current = setInterval(tick, 400); // har 400ms
+
+        } else if (mode === 3) {
+            // ── YONIQ: hamma bloklarni birato'la yoqamiz ──
+            wsService.sendCommand('GLOBAL_ON');
         }
     }, [stopModeAnimation]);
 
@@ -241,7 +246,7 @@ const BuildingMap = () => {
         }
 
         return () => stopModeAnimation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modeIndex, activeIndex]);
 
     // ================================================================
@@ -254,22 +259,22 @@ const BuildingMap = () => {
             <div className="controls">
                 <button className="nav-btn" onClick={handleModeNext}>↑</button>
                 <div className="current-mode">
-                    {modes[modeIndex].label}
+                    <p>{modes[modeIndex].label}</p>
                 </div>
                 <button className="nav-btn" onClick={handleModePrev}>↓</button>
             </div>
 
-            <div 
-                title="Rang sozlamasi" 
-                style={{ 
+            <div
+                title="Rang sozlamasi"
+                style={{
                     position: 'absolute',
                     top: '20px',
                     right: '25px',
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '8px', 
-                    background: '#000', 
-                    padding: '8px 14px', 
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: '#000',
+                    padding: '8px 14px',
                     borderRadius: '25px',
                     boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
                     border: '1px solid rgba(255,255,255,0.15)',
@@ -278,15 +283,15 @@ const BuildingMap = () => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <span style={{ fontSize: '20px', display: 'flex', alignItems: 'center' }}>⚙️</span>
-                <input 
-                    type="color" 
-                    value={color} 
-                    onChange={handleColorChange} 
-                    style={{ 
-                        cursor: 'pointer', 
-                        border: 'none', 
-                        background: 'transparent', 
-                        height: '30px', 
+                <input
+                    type="color"
+                    value={color}
+                    onChange={handleColorChange}
+                    style={{
+                        cursor: 'pointer',
+                        border: 'none',
+                        background: 'transparent',
+                        height: '30px',
                         width: '35px',
                         padding: '0'
                     }}

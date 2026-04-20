@@ -29,8 +29,10 @@ svg {
 }
 
 .nav-btn {
-    width: 100px;
-    height: 40px;
+    width: auto;
+    min-width: 120px;
+    height: 45px;
+    padding: 0 20px;
     border: none;
     background-color: #000;
     color: #fff;
@@ -40,7 +42,7 @@ svg {
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 .nav-btn:hover {
@@ -48,18 +50,27 @@ svg {
 }
 
 .current-mode {
-    width: 100px;
-    height: 40px;
+    width: auto;
+    min-width: 120px;
+    min-height: 45px;
+    padding: 8px 15px;
     background-color: #000;
     color: #fff;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    text-align: center;
+    border-radius: 12px;
+    line-height: 1.2;
+}
+
+.current-mode p {
+    margin: 0;
+    padding: 0;
 }
 
 /* Label Popup Styles */
